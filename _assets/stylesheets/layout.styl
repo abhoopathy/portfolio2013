@@ -1,0 +1,106 @@
+/* variables */
+
+columns= 12
+column-width= 60px
+gutter-width= 20px
+total-width= 960px
+$container-side-padding=25px
+
+header
+    position fixed
+    width 960px
+    left 50%
+    margin-left (960px*-1/2)
+    padding-top 10px
+    padding-bottom 10px
+    z-index 999
+
+.container
+    width 960px + 2 * $container-side-padding
+    padding 0px $container-side-padding 100px $container-side-padding
+    margin auto
+    background $container-color
+    clearfix()
+
+.page
+    padding-top 100px
+    padding-bottom 100px
+    clearfix()
+    border-top 1px solid $line-color
+
+    &:first-child
+        padding-top 150px
+        border-top none
+
+// hi
+.page#portfolio
+    position relative
+
+    .sidebar-list-wrapper
+        position absolute
+        top 216px
+        left 0
+
+        &.fixed
+            position fixed
+
+    .portfolio-pieces
+        push(3)
+
+
+.page-column2
+    column 3
+.page-column4
+    column 4
+.page-column8
+    column 8
+.page-column12
+    column 12
+.page-column10
+    column 9
+
+.center-text
+    text-align center
+.m-top-20
+    margin-top 20px
+
+
+.h-rule-12
+    column 12
+    height 1px
+    border-bottom 1px solid $line-color
+    margin-top 10px
+    margin-bottom 25px
+
+
+@media only screen and (max-width: 960px)
+
+    header
+        width 100%
+        margin-left 0
+        left 0
+
+    .container
+        width 100%
+
+    .page-column2.page-column4, .page-column8, .page-column12, .page-column10
+        width 100%
+        margin-left 0
+        margin-right 0
+
+    .page#portfolio
+        position static
+
+        .sidebar-list-wrapper
+            display none
+            visibility hidden
+
+            &.fixed
+                display none
+                visibility hidden
+
+        .portfolio-pieces
+            width 100%
+            margin-left 0
+            margin-right 0
+

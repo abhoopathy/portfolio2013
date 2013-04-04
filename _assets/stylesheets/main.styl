@@ -1,0 +1,40 @@
+/* Vendor */
+@import '_assets/stylesheets/grid'
+@import '_assets/stylesheets/nib/vendor'
+
+/* Main */
+@import '_assets/stylesheets/colors'
+@import '_assets/stylesheets/text'
+@import '_assets/stylesheets/layout'
+@import '_assets/stylesheets/mixins'
+
+/* Modules */
+@import '_assets/stylesheets/modules/header'
+@import '_assets/stylesheets/modules/aside'
+@import '_assets/stylesheets/modules/about'
+@import '_assets/stylesheets/modules/portfolio'
+
+*
+    box-sizing: border-box
+
+button
+    background-color $button-color
+    border none
+    padding 1em 1.5em
+    font-family 'deliciousbold'
+    color $button-text-color
+    text-transform uppercase
+    border-radius 5px
+    text-shadow 0px 1px darken($button-color,20%)
+
+    &:hover
+        background-color lighten($button-color,10%)
+
+body
+    background-color $background-color
+
+.nav-list a, .sidebar-list a
+    text-decoration none
+    color $text-color
+    &:hover
+        color $secondary-text-color

@@ -1,0 +1,64 @@
+
+@font-face
+    font-family 'deliciousroman'
+    src url('fonts/delicious/delicious-roman-webfont.eot')
+    src url('fonts/delicious/delicious-roman-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/delicious/delicious-roman-webfont.woff') format('woff'),
+        url('fonts/delicious/delicious-roman-webfont.ttf') format('truetype'),
+        url('fonts/delicious/delicious-roman-webfont.svg#deliciousroman') format('svg')
+    font-weight normal
+    font-style normal
+
+@font-face
+    font-family 'deliciousbold'
+    src url('fonts/delicious/delicious-bold-webfont.eot')
+    src url('fonts/delicious/delicious-bold-webfont.eot?#iefix') format('embedded-opentype'),
+        url('fonts/delicious/delicious-bold-webfont.woff') format('woff'),
+        url('fonts/delicious/delicious-bold-webfont.ttf') format('truetype'),
+        url('fonts/delicious/delicious-bold-webfont.svg#deliciousbold') format('svg')
+    font-weight normal
+    font-style normal
+
+
+html,
+button,
+input,
+select,
+textarea
+    font-family: 'deliciousroman'
+    font-size 16px
+    line-height 1.4
+    color $text-color
+
+p
+    line-height 1.2em
+    margin 1em 0 .2em 0
+b
+    letter-spacing -.08em
+h1, h2, h3, h4, h5, h6, b
+    font-family: 'deliciousbold'
+    &:first-child
+        margin-top 0
+h1
+    font-size 2.6em
+    letter-spacing -.05em
+    margin 1.6em 0 1em 0
+h2
+    font-size 1.6em
+    letter-spacing -.05em
+    margin 1.6em 0 .7em 0
+h3
+    font-size 1.1em
+    letter-spacing -.07em
+    margin 1.6em 0 .2em 0
+    color $secondary-text-color
+
+.tagline
+    letter-spacing -.07em
+    font-size 1.1em
+    margin -1.3em 0 .9em 0
+    color lighten($text-color,40%)
+
+.centered-box
+    margin 1.6em 0 .2em 0
+    text-align center

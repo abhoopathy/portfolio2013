@@ -1,0 +1,143 @@
+---
+title: Aneesh Bhoopathy
+layout: default
+---
+
+{% include about.html %}
+
+<div class='page' id='portfolio'>
+
+    <div class='page-column12'>
+        <h1>Portfolio</h1>
+    </div>
+
+    <aside class='sidebar-list-wrapper page-column2'>
+
+        <ul class='sidebar-list'>
+
+            <li class='sidebar-list-item'>
+                <b>Academic Work</b>
+                <ul class='sidebar-sub-list'>
+                    {% for post in site.tags.academic %}
+                        <li class='sidebar-sub-list-item'>
+                            <a href='#{{ post.url }}'>{{ post.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            <li class='sidebar-list-item'>
+                <b>Industry Work</b>
+                <ul class='sidebar-sub-list'>
+                    {% for post in site.tags.industry %}
+                        <li class='sidebar-sub-list-item'>
+                            <a href='#{{ post.url }}'>{{ post.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            <!--<li class='sidebar-list-item'>-->
+                <!--<b>Experiments & Hackathons</b>-->
+                <!--<ul class='sidebar-sub-list'>-->
+                    <!--<li class='sidebar-sub-list-item'>-->
+                        <!--<a href='#yincam'>Project</a>-->
+                    <!--</li>-->
+                    <!--<li class='sidebar-sub-list-item'>-->
+                        <!--<a href='#yincam'>Project</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
+
+        </ul>
+    </aside>
+
+    <div class='portfolio-pieces page-column10'>
+
+
+        {% for post in site.tags.academic %}
+            <div class='portfolio-piece'>
+                <h2>{{ post.title }}</h2>
+                <p class='tagline'>{{ post.tagline }}</p>
+                {{ post.content }}
+            </div>
+        {% endfor %}
+
+        {% for post in site.tags.industry %}
+            <div class='portfolio-piece'>
+                <h2>{{ post.title }}</h2>
+                <p class='tagline'>{{ post.tagline }}</p>
+                {{ post.content }}
+            </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<div class='page' id='resume'>
+    <div class='page-column12'>
+        <h1>Resume</h1>
+    </div>
+    <div class='page-column4'>
+        <h2 id='education'>Education</h2>
+
+        <p>Carnegie Mellon U. 2013<br />B.S. Human-Computer Interaction<br />B.S. Cognitive Science<br />GPA 3.40</p>
+
+        <h2 id='skills'>Skills</h2>
+
+        <h3 id='abilities'>Abilities</h3>
+
+        <p>Highly skilled with Adobe CS5<br />Digital Photography
+        (flickr.com/abhoopathy)<br />Strong writer. Samples available upon
+        request</p>
+
+        <h3 id='technology'>Technology</h3>
+
+        <p>In rough order of familiarity: HTML, CSS, JavaScript, SML, Ruby
+        (Haml, Sass), Flex/ActionScript, Java, and PHP. I’ve used popular
+        libraries built on these technologies, like jQuery, Wordpress, Rails,
+        Android, and Backbone.</p>
+
+    </div>
+    <div class='page-column8'>
+        <h2 id='experience'>Experience</h2>
+
+        <h3 id='venmo_nyc_summer_2012'>Venmo (NYC Summer 2012)</h3>
+
+        <p>Designed and helped build Venmo’s “logged out” web site in a 1.5
+        week design and code sprint. Provided UX support and asset creation for
+        Android and iOS teams. Worked with 2 other interns on development of
+        mobile friendly, ultra fast Backbone.js app.</p>
+
+        <h3 id='cmu_cee_department_pittsburgh_2009__present'>CMU CEE Department (Pittsburgh 2009 - Present)</h3>
+
+        <p>Led a three person group working to visualize data from the Economic
+        Input-Output Life Cycle Assessment, which asesses the environmental
+        impact of economic activity between sectors.</p>
+
+        <p>Designed a tool for college decision-makers to visualize their
+        sustainability peer-groups by comparing themselves to other schools on
+        environmental metrics.</p>
+
+        <h3 id='yinzcam_pittsburgh_2010__2012'>Yinzcam (Pittsburgh 2010 - 2012)</h3>
+
+        <p>Design of iOS, Android, and Blackberry Apps alongside a lead
+        designer. Automated the asset generation process through Photoshop
+        scripting.</p>
+
+        <p>Designed and developed RockYourJersey an experimental app for the
+        NHL Winter Classic, Super Bowl XLV, and Penn State Football. The app
+        visualized where fans watched each event.</p>
+
+    </div>
+    <div class='page-column12 center-text m-top-20'>
+        <button>Download PDF</button>
+    </div>
+</div>
+
+<div class='page' id='contact'>
+    <div class='page-column12'>
+        <h1>Contact</h1>
+    </div>
+</div>

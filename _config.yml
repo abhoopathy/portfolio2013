@@ -1,0 +1,10 @@
+name: "Aneesh Bhoopathy"
+description: "Aneesh's Design Portfolio"
+
+url: “http://localhost:4000”
+
+asset_pipeline:
+    bundle: true
+    compress: true
+    #display_path: "portfolio_staging/assets"
+    gzip: true
