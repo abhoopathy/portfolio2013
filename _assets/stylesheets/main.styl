@@ -33,7 +33,13 @@ button
 body
     background-color $background-color
 
-.nav-list a, .sidebar-list a
+.nav-list a
+    text-decoration none
+    color white
+    &:hover
+        color $secondary-text-color
+
+.sidebar-list a
     text-decoration none
     color $text-color
     &:hover

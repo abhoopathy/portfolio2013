@@ -10,8 +10,8 @@
             <b>Academic Work</b>
             <ul class='sidebar-sub-list'>
                 {% for post in site.tags.academic %}
-                    <li class='sidebar-sub-list-item'>
-                        <a href='#{{ post.url }}'>{{ post.title }}</a>
+                    <li class='sidebar-sub-list-item' id="portfolio-link-{{ post.uid }}">
+                        <a href='#portfolio-piece-{{ post.uid }}'>{{ post.title }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -21,8 +21,8 @@
             <b>Industry Work</b>
             <ul class='sidebar-sub-list'>
                 {% for post in site.tags.industry %}
-                    <li class='sidebar-sub-list-item'>
-                        <a href='#{{ post.url }}'>{{ post.title }}</a>
+                    <li class='sidebar-sub-list-item' id="portfolio-link-{{ post.uid }}">
+                        <a href='#portfolio-piece-{{ post.uid }}'>{{ post.title }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -47,7 +47,7 @@
 
 
     {% for post in site.tags.academic %}
-        <div class='portfolio-piece'>
+        <div class='portfolio-piece' id="portfolio-piece-{{ post.uid }}">
             <h2>{{ post.title }}</h2>
             <p class='tagline'>{{ post.tagline }}</p>
             {{ post.content }}
@@ -55,7 +55,7 @@
     {% endfor %}
 
     {% for post in site.tags.industry %}
-        <div class='portfolio-piece'>
+        <div class='portfolio-piece' id="portfolio-piece-{{ post.uid }}">
             <h2>{{ post.title }}</h2>
             <p class='tagline'>{{ post.tagline }}</p>
             {{ post.content }}

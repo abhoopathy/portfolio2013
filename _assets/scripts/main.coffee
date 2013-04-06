@@ -136,6 +136,3 @@ $(window).load ->
 
         $calloutImage.css
             'background-position': "50% #{scroll}px"
-
-
-

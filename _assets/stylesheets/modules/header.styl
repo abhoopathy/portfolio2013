@@ -1,11 +1,18 @@
 $logo-size= 50px
 
+.rel-container
+    display block
+    position relative
+    height 70px
+
 .header-wrapper
+    z-index 999
     position absolute
     top 0
     width 100%
     z-index 999
-    //background-color:rgba(255,255,255,.5);
+    background-color $top-bar-color
+    color white
     padding-top 20px
     padding-bottom 20px
     &.fixed
@@ -17,7 +24,7 @@ $logo-size= 50px
     margin-right 20px
 
     &:after
-        opacity .2
+        color darken(white,60%)
         float right
         line-height $logo-size
         content '>'
@@ -40,12 +47,14 @@ $nav-indicator-size= 3px
     position relative
     h-spacing(20px)
     //border-top $nav-indicator-size solid transparent
-
     &.active
         display: block
         //border-top $nav-indicator-size solid $nav-indicator-color
         a
             color $nav-indicator-color
+    a
+        color white
+
 
 
 /*
