@@ -3,6 +3,7 @@ title: Blackboard Redesign
 category: portfolio
 tag: academic
 tagline: How can students and teachers work more efficiently?
+uid: blackboard
 ---
 
 For a class, I worked and four other students researched the workflow of

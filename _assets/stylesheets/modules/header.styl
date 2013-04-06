@@ -1,19 +1,62 @@
-header.visible
-    background-color:rgba(255,255,255,0.9);
-    .nav-list
-        -webkit-transform translate3d(0,0,0)
-    .header-name
+$logo-size= 50px
+
+.header-wrapper
+    position absolute
+    top 0
+    width 100%
+    z-index 999
+    //background-color:rgba(255,255,255,.5);
+    padding-top 20px
+    padding-bottom 20px
+    &.fixed
+        position fixed
+
+.header-name
+    line-height $logo-size
+    float left
+    margin-right 20px
+
+    &:after
+        opacity .2
+        float right
+        line-height $logo-size
+        content '>'
+        margin 0 20px 0 20px
+
+/* top navigation */
+nav
+    float left
+    overflow hidden
+
+$nav-indicator-size= 3px
+/*.nav-list
+    -webkit-transform translate3d(-400px,0,0)
+    -webkit-transition -webkit-transform 0.15s linear
+    clear both*/
+
+.nav-list-item
+    //padding 5px
+    line-height $logo-size
+    position relative
+    h-spacing(20px)
+    //border-top $nav-indicator-size solid transparent
+
+    &.active
+        display: block
+        //border-top $nav-indicator-size solid $nav-indicator-color
+        a
+            color $nav-indicator-color
+
+
+/*
+ON VISIBLE
+    .header-logo-wrapper
         opacity .9
         &:after
             content '>'
 
-    /*.header-logo-wrapper
-        opacity .9
-        &:after
-            content '>'*/
-
 $logo-size= 50px
-/*.header-logo-wrapper
+.header-logo-wrapper
     padding-right 10px
     width $logo-size + 30px
     text-align center
@@ -29,39 +72,3 @@ $logo-size= 50px
     height $logo-size
     width  $logo-size
     float left*/
-
-nav
-    float left
-    overflow hidden
-
-.header-name
-    line-height $logo-size
-    float left
-    margin-right 20px
-
-    &:after
-        opacity .2
-        float right
-        line-height $logo-size
-        content '<'
-        margin 0 20px 0 20px
-
-/* top navigation */
-$nav-indicator-size= 3px
-.nav-list
-    -webkit-transform translate3d(-400px,0,0)
-    -webkit-transition -webkit-transform 0.15s linear
-    clear both
-
-.nav-list-item
-    //padding 5px
-    line-height $logo-size
-    position relative
-    h-spacing(20px)
-    //border-top $nav-indicator-size solid transparent
-
-    &.active
-        display: block
-        //border-top $nav-indicator-size solid $nav-indicator-color
-        a
-            color $nav-indicator-color

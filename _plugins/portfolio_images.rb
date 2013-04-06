@@ -9,8 +9,9 @@ module Jekyll
         end
 
         def render(context)
-            page_url = context.environments.first["page"]["id"]
-            page_name = page_url.match(/\/([A-Za-z-]+)$/)[1].downcase()
+            #page_url = context.environments.first["page"]["id"]
+            #page_name = page_url.match(/\/([A-Za-z-]+)$/)[1].downcase()
+            page_name = context.environments.first["page"]["uid"]
             return "<img class=\"portfolio-img\" src=\"assets/portfolio_images/#{page_name}/#{@text}\"/>"
         end
     end

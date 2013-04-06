@@ -1,20 +1,7 @@
 $(window).load ->
     $window = $(window)
     $portfolio = $('.page#portfolio')
-
-    portfolioTop = -1
-    portfolioLeft = -1
-    resumeTop = -1
-
-    setSizes = ->
-        portfolioTop = $portfolio.offset().top + 216 - 100
-        portfolioLeft = $portfolio.offset().left
-        resumeTop = portfolioTop + $portfolio.height() - $('.sidebar-list-wrapper').height()
-
-    setSizes()
-    $window.resize ->
-        setSizes()
-
+    $calloutImage = $('.callout-image')
 
     class Carousel
 
@@ -71,36 +58,19 @@ $(window).load ->
     $('#portfolio .img-carousel').each (i,el) -> new Carousel(el)
 
     header =
-        $el:$('header')
+        $el:$('.header-wrapper')
 
-        atTop: true
-        mouseIsOver: false
+        fixed: false
 
-        show: -> @$el.addClass 'visible'
-        hide: -> @$el.removeClass 'visible'
+        positionFixed: ->
+            if !@fixed
+                @fixed=true
+                @$el.addClass('fixed')
 
-        pageScrollTop: ->
-            @atTop = true
-            @show()
-
-        pageScrollNotTop: ->
-            @atTop = false
-            @hide() unless @mouseIsOver
-
-        mouseenter: ->
-            @mouseIsOver = true
-            @show()
-
-        mouseleave: ->
-            @mouseIsOver = false
-            @hide() unless @atTop
-
-        init: ->
-            _.bindAll(this)
-            @$el.hover(@mouseenter,@mouseleave)
-
-    header.init()
-
+        positionAbsolute: ->
+            if @fixed
+                @fixed=false
+                @$el.removeClass('fixed')
 
     portfolioSideBar =
         $el: $('.sidebar-list-wrapper')
@@ -110,22 +80,24 @@ $(window).load ->
 
         positionFixed: ->
             if !@fixed
+                console.log "change sidebar to fixed"
                 @fixed=true
                 @$el
                     .addClass('fixed')
                     .css
-                        left: $portfolio.offset().left
-                        top: 100
+                        left: $portfolio.offset().left+20+"px"
+                        top: "100px"
             else if !@fadedIn
                 @fadedIn=true
                 @$el.fadeIn(100)
 
         positionAbsolute: ->
             if @fixed
+                console.log "change sidebar to absolute"
                 @fixed=false
                 @$el.removeClass('fixed')
                     .css
-                        left: 0
+                        left: 20
                         top: 216
         fadeOut: ->
             if @fadedIn
@@ -133,13 +105,26 @@ $(window).load ->
                 @$el.fadeOut(100)
 
 
+    portfolioTop = -1
+    portfolioLeft = -1
+    resumeTop = -1
+    headerTop = -1
+    setSizes = ->
+        headerTop = header.$el.offset().top
+        portfolioTop = portfolioSideBar.$el.offset().top-100
+        portfolioLeft = $portfolio.offset().left
+        resumeTop = portfolioTop + $portfolio.height() - $('.sidebar-list-wrapper').height()
+    $window.resize ->
+        setSizes()
+    setSizes()
+
     $window.scroll (e)->
         scroll = $window.scrollTop()
 
-        #if scroll < 100
-            #header.pageScrollTop()
-        #else
-            #header.pageScrollNotTop()
+        if scroll < headerTop
+            header.positionAbsolute()
+        else
+            header.positionFixed()
 
         if portfolioTop < scroll < resumeTop
             portfolioSideBar.positionFixed()
@@ -148,6 +133,9 @@ $(window).load ->
 
         else
             portfolioSideBar.fadeOut()
+
+        $calloutImage.css
+            'background-position': "50% #{scroll}px"
 
 
 
