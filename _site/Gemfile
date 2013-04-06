@@ -14,3 +14,8 @@ gem 'compass'
 
 gem 'guard'
 gem 'guard-livereload'
+gem 'guard-shell'
+
+gem 'yui-compressor'
+gem 'closure-compiler'
+gem 'image_optim'

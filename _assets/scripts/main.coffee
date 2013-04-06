@@ -35,11 +35,15 @@ $(window).load ->
 
         resize: ->
             @$el.height(@images.first().height())
-            @images.each (i,img) ->
-                $img = $(img)
-                $img.css
-                    'margin-left': ($img.width()/-2)
-                    'margin-top': ($img.height()/-2)
+            #@images.each (i,img) ->
+                #$img = $(img)
+                #$img.css
+                    #'margin-left': ($img.width()/-2)
+                    #'margin-top': ($img.height()/-2)
+                    #top 50%
+                    #left 50%
+                    #margin 0
+                    #position absolute
 
         currIndex: 0
 
