@@ -13,7 +13,7 @@ $window.load ->
             "resume": "fixHeader"
             "contact": "fixHeader"
         portfolio: () ->
-            App.Views.portfolioView.positionAbsolute()
+            App.Views.portfolioView.showSidebar()
             @fixHeader()
         fixHeader: () ->
             App.Views.headerView.positionFixed()
@@ -62,7 +62,6 @@ $window.load ->
         initialize: ->
             @$links = @$('.nav-list-item a')
             @headerHeight = @$el.outerHeight()
-            App.Events.trigger('portfolioLinkClicked')
 
         offsetTop: -> @$el.offset().top
 
@@ -108,11 +107,15 @@ $window.load ->
 
         positionAbsolute: ->
             if @fixed
-                @fixed=false
-                @$sidebar.removeClass('fixed')
-                    .css
-                        left: @sidebarMarginLeft
-                        top: @sidebarAbsoluteMarginTop
+                @showSidebar()
+
+        showSidebar: ->
+            @fixed=false
+            @$sidebar.fadeIn(100)
+            @$sidebar.removeClass('fixed')
+                .css
+                    left: @sidebarMarginLeft
+                    top: @sidebarAbsoluteMarginTop
         resize: ->
             if @fixed
                 @$sidebar.css
@@ -124,6 +127,7 @@ $window.load ->
                 @fadedIn=false
                 @$sidebar.fadeOut(100)
 
+
     class AppView extends Backbone.View
 
         el: ('body')
@@ -132,7 +136,6 @@ $window.load ->
         initialize: ->
             _.bindAll(this)
             @$calloutImage = @$('.callout-image')
-
 
             App.Views.headerView = new HeaderView()
             App.Views.portfolioView = new PortfolioView()
