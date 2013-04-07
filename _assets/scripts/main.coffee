@@ -61,8 +61,8 @@ $window.load ->
 
         initialize: ->
             @$links = @$('.nav-list-item a')
-            @$links = 
-            App.Constants.HEADER_HEIGHT= @$el.outerHeight()
+            @headerHeight = @$el.outerHeight()
+            App.Events.trigger('portfolioLinkClicked')
 
         offsetTop: -> @$el.offset().top
 
@@ -90,7 +90,6 @@ $window.load ->
             @$sidebarLinks = @$sidebar.find('.sidebar-sub-list-item a')
             @$('.img-carousel').each (i,el) -> new CarouselView {el: el}
             @sidebarAbsoluteMarginTop = @$sidebar.position().top
-            console.log @sidebarAbsoluteMarginTop
 
         offsetTop: -> @$sidebar.offset().top - @sidebarMarginTop
         offsetBottom: -> @$el.offset().top + @$el.height() - @$sidebar.height()
@@ -125,28 +124,74 @@ $window.load ->
                 @fadedIn=false
                 @$sidebar.fadeOut(100)
 
-    $calloutImage = $('.callout-image')
+    class AppView extends Backbone.View
 
-    App.Views.headerView = new HeaderView()
+        el: ('body')
+        scrollRanges: []
 
-    App.Views.portfolioView = new PortfolioView()
+        initialize: ->
+            _.bindAll(this)
+            @$calloutImage = @$('.callout-image')
 
 
+            App.Views.headerView = new HeaderView()
+            App.Views.portfolioView = new PortfolioView()
 
-    App.initialize = ->
-        App.Router = new Router()
-        Backbone.history.start()
+            #TODO remove hack when we have contact content
+            @$('#contact').closest('.page').css
+                'min-height': $window.height()
 
-        ## hack to make last section at least size of page
-        $('#contact').closest('.page').css
-            'min-height': $window.height()
+            #TODO modernizr logic to this?
+            @$('.page-anchor').css
+                top: -1 * App.Views.headerView.headerHeight
 
-        $('.page-anchor').css
-            top: -1 * App.Constants.HEADER_HEIGHT
+            @setSizes()
 
-        App.scrollRanges = []
-        setSizes = ->
-            App.scrollRanges = [
+            @scrolled = false
+            window.setInterval @checkScroll, 30
+
+            $window.scroll @handleWindowScroll
+            $window.resize @handleWindowResize
+
+        handleWindowResize: ->
+                @setSizes()
+                App.Views.portfolioView.resize()
+
+        checkScroll: ->
+            scroll = $window.scrollTop()
+            if @scrolled
+                _.each @scrollRanges, (range) ->
+
+                    if range.lo? && !range.hi?
+                        if scroll >= range.lo
+                            range.handle(scroll) if range.handle?
+                        else
+                            range.handleLo(scroll) if range.handleLo?
+
+                    else if !range.lo? && range.hi?
+                        if scroll < range.hi
+                            range.handle(scroll) if range.handle?
+                        else
+                            range.handleHi(scroll) if range.handleHi?
+
+                    else if range.lo? && range.hi?
+                        if range.lo <= scroll < range.hi
+                            range.handle(scroll)
+                        else if scroll < range.lo
+                            range.handleLo(scroll) if range.handleLo?
+                        else
+                            range.handleHi(scroll) if range.handleHi?
+            @scrolled = false
+
+
+        handleWindowScroll: ->
+            @scrolled = true
+            scroll = $window.scrollTop()
+            @$calloutImage.css {'background-position': "50% #{scroll}px"}
+
+
+        setSizes: ->
+            @scrollRanges = [
                 {
                     lo: App.Views.headerView.offsetTop()
                     handle: -> App.Views.headerView.positionFixed()
@@ -159,66 +204,38 @@ $window.load ->
                     handleLo: -> App.Views.portfolioView.positionAbsolute()
                     handleHi: -> App.Views.portfolioView.fadeOut()
                 }
-                {
-                    lo: -100
-                    hi: App.Views.portfolioView.offsetTop()
-                    handle: (scroll) -> $calloutImage.css {'background-position': "50% #{scroll}px"}
-                }
             ]
 
-            addLinkAnchorRanges = ($links, offset, parentClass) ->
-                _.each $links, (link, i) ->
-                    $link = $(link)
-                    pageID = $(link).attr('href')
-                    $page = $(pageID).closest('.'+parentClass)
-                    lo = $page.offset().top
-                    hi = lo + $page.outerHeight()
-                    rangeData =
-                        lo: lo - offset
-                        hi: hi - offset
-                        handle: ->
-                            $links.removeClass('active')
-                            $link.addClass('active')
-                    if i == 0
-                        rangeData.handleLo = -> $links.removeClass('active')
-                    App.scrollRanges.push rangeData
+            @addLinkAnchorRanges(App.Views.headerView.$links,
+                App.Views.headerView.headerHeight, 'page')
 
-            addLinkAnchorRanges(App.Views.headerView.$links, App.Constants.HEADER_HEIGHT, 'page')
-            addLinkAnchorRanges(App.Views.portfolioView.$sidebarLinks, App.Constants.HEADER_HEIGHT, 'portfolio-piece')
+            @addLinkAnchorRanges(App.Views.portfolioView.$sidebarLinks,
+                App.Views.headerView.headerHeight, 'portfolio-piece')
 
-
-        setSizes()
-        $window.resize ->
-            setSizes()
-            App.Views.portfolioView.resize()
-
-        $window.scroll (e)->
-            scroll = $window.scrollTop()
-
-            _.each App.scrollRanges, (range) ->
-
-                if range.lo? && !range.hi?
-                    if scroll >= range.lo
-                        range.handle(scroll) if range.handle?
-                    else
-                        range.handleLo(scroll) if range.handleLo?
-
-                else if !range.lo? && range.hi?
-                    if scroll < range.hi
-                        range.handle(scroll) if range.handle?
-                    else
-                        range.handleHi(scroll) if range.handleHi?
-
-                else if range.lo? && range.hi?
-                    if range.lo <= scroll < range.hi
-                        range.handle(scroll)
-                    else if scroll < range.lo
-                        range.handleLo(scroll) if range.handleLo?
-                    else
-                        range.handleHi(scroll) if range.handleHi?
+        addLinkAnchorRanges: ($links, offset, parentClass) ->
+            _.each $links, ((link, i) ->
+                $link = $(link)
+                pageID = $(link).attr('href')
+                $page = $(pageID).closest('.'+parentClass)
+                lo = $page.offset().top
+                hi = lo + $page.outerHeight()
+                rangeData =
+                    lo: lo - offset
+                    hi: hi - offset
+                    handle: ->
+                        $links.removeClass('active')
+                        $link.addClass('active')
+                if i == 0
+                    rangeData.handleLo = -> $links.removeClass('active')
+                @scrollRanges.push rangeData
+            ), this
 
 
-
+    # Initialize Everything!
+    App.initialize = ->
+        App.Views.appView = new AppView()
+        App.Router = new Router()
+        Backbone.history.start()
 
     App.initialize()
 
