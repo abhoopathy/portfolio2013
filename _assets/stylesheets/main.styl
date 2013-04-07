@@ -32,9 +32,10 @@ button
 body
     background-color $background-color
 
-a
+a, a:link, a:visited, a:active
+    color $secondary-text-color
     &:hover
-        color $secondary-text-color
+        color lighten($secondary-text-color,20%)
     &.active
         color $nav-indicator-color
         &:hover
@@ -54,3 +55,7 @@ a
         &:hover
             color $nav-indicator-color
 
+.sidebar-list a.active:before
+    content '> '
+    position absolute
+    left 0
