@@ -1,4 +1,4 @@
-$logo-size= 50px
+$top-bar-size= 50px
 
 .rel-container
     display block
@@ -19,14 +19,14 @@ $logo-size= 50px
         position fixed
 
 .header-name
-    line-height $logo-size
+    line-height $top-bar-size
     float left
     margin-right 20px
 
     &:after
         color darken(white,60%)
         float right
-        line-height $logo-size
+        line-height $top-bar-size
         content '>'
         margin 0 20px 0 20px
 
@@ -43,41 +43,6 @@ $nav-indicator-size= 3px
 
 .nav-list-item
     //padding 5px
-    line-height $logo-size
+    line-height $top-bar-size
     position relative
     h-spacing(20px)
-    //border-top $nav-indicator-size solid transparent
-    &.active
-        display: block
-        //border-top $nav-indicator-size solid $nav-indicator-color
-        a
-            color $nav-indicator-color
-    a
-        color white
-
-
-
-/*
-ON VISIBLE
-    .header-logo-wrapper
-        opacity .9
-        &:after
-            content '>'
-
-$logo-size= 50px
-.header-logo-wrapper
-    padding-right 10px
-    width $logo-size + 30px
-    text-align center
-    float left
-    opacity .2
-
-    &:after
-        float right
-        line-height $logo-size
-        content '<'
-
-.header-logo
-    height $logo-size
-    width  $logo-size
-    float left*/

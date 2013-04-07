@@ -10,7 +10,6 @@
 
 /* Modules */
 @import '_assets/stylesheets/modules/header'
-@import '_assets/stylesheets/modules/aside'
 @import '_assets/stylesheets/modules/about'
 @import '_assets/stylesheets/modules/portfolio'
 
@@ -33,14 +32,25 @@ button
 body
     background-color $background-color
 
-.nav-list a
-    text-decoration none
-    color white
+a
     &:hover
         color $secondary-text-color
+    &.active
+        color $nav-indicator-color
+        &:hover
+            color $nav-indicator-color
 
-.sidebar-list a
+.nav-list a, .sidebar-list a
     text-decoration none
-    color $text-color
+
+.nav-list a
+    color white
+    border-bottom $nav-indicator-size solid transparent
     &:hover
         color $secondary-text-color
+    &.active
+        border-bottom $nav-indicator-size solid $nav-indicator-color
+        color $nav-indicator-color
+        &:hover
+            color $nav-indicator-color
+

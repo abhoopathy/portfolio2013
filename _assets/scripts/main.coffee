@@ -1,38 +1,33 @@
-$(window).load ->
-    $window = $(window)
-    $portfolio = $('.page#portfolio')
-    $calloutImage = $('.callout-image')
+$window = $(window)
 
-    class Carousel
+$window.load ->
 
-        constructor: (el) ->
+    ## hack to make last section at least size of page
+    $('.page#contact').css
+        'min-height': $window.height()
+
+    window.App =
+        Views: {}
+        Constants: {}
+
+    App.Router = Backbone.Router.extend
+        routes:
+            "": ""
+
+    class CarouselView extends Backbone.View
+
+        currIndex: 0
+
+        initialize: () ->
             _.bindAll(this)
-            @$el = $(el)
-
             @$buttonPrev = $("<div class='img-carousel-button img-carousel-button-prev'><</div>")
             @$buttonNext = $("<div class='img-carousel-button img-carousel-button-next'>></div>")
             @$el.append @$buttonPrev
             @$el.append @$buttonNext
             @$buttonPrev.click @prevImage
             @$buttonNext.click @nextImage
-
             @images = @$el.find('.portfolio-img')
-            @resize()
-
-
-        resize: ->
             @$el.height(@images.first().height())
-            #@images.each (i,img) ->
-                #$img = $(img)
-                #$img.css
-                    #'margin-left': ($img.width()/-2)
-                    #'margin-top': ($img.height()/-2)
-                    #top 50%
-                    #left 50%
-                    #margin 0
-                    #position absolute
-
-        currIndex: 0
 
         step: (i1,i2)->
             $(@images[i1]).hide()
@@ -55,12 +50,16 @@ $(window).load ->
             @step(i1, @currIndex)
 
 
-    $('#portfolio .img-carousel').each (i,el) -> new Carousel(el)
+    class HeaderView extends Backbone.View
 
-    header =
-        $el:$('.header-wrapper')
-
+        el:$('.header-wrapper')
         fixed: false
+
+        initialize: ->
+            @$links = @$('.nav-list-item a')
+            App.Constants.HEADER_HEIGHT= @$el.outerHeight()
+
+        offsetTop: -> @$el.offset().top
 
         positionFixed: ->
             if !@fixed
@@ -72,67 +71,131 @@ $(window).load ->
                 @fixed=false
                 @$el.removeClass('fixed')
 
-    portfolioSideBar =
-        $el: $('.sidebar-list-wrapper')
 
+    class PortfolioView extends Backbone.View
+
+        el: $('.page#portfolio')
         visible: true
         fadedIn: true
+        sidebarMarginTop: 150
+        sidebarMarginLeft: 30
+
+        initialize: ->
+            @$sidebar = @$('.sidebar-list-wrapper')
+            @$sidebarLinks = @$sidebar.find('.sidebar-sub-list-item a')
+            @$('.img-carousel').each (i,el) -> new CarouselView {el: el}
+
+        offsetTop: -> @$sidebar.offset().top - @sidebarMarginTop
+        offsetBottom: -> @$el.offset().top + @$el.height() - @$sidebar.height()
 
         positionFixed: ->
             if !@fixed
-                console.log "change sidebar to fixed"
                 @fixed=true
-                @$el
+                @$sidebar
                     .addClass('fixed')
                     .css
-                        left: $portfolio.offset().left+20+"px"
-                        top: "100px"
+                        left: @$el.offset().left + @sidebarMarginLeft
+                        top: @sidebarMarginTop
             else if !@fadedIn
                 @fadedIn=true
-                @$el.fadeIn(100)
+                @$sidebar.fadeIn(100)
 
         positionAbsolute: ->
             if @fixed
-                console.log "change sidebar to absolute"
                 @fixed=false
-                @$el.removeClass('fixed')
+                @$sidebar.removeClass('fixed')
                     .css
-                        left: 20
+                        left: @sidebarMarginLeft
                         top: 216
+        resize: ->
+            if @fixed
+                @$sidebar.css
+                        left: @$el.offset().left + @sidebarMarginLeft
+                        top: @sidebarMarginTop
+
         fadeOut: ->
             if @fadedIn
                 @fadedIn=false
-                @$el.fadeOut(100)
+                @$sidebar.fadeOut(100)
 
+    $calloutImage = $('.callout-image')
+    App.Views.headerView = new HeaderView()
 
-    portfolioTop = -1
-    portfolioLeft = -1
-    resumeTop = -1
-    headerTop = -1
+    App.Views.portfolioView = new PortfolioView()
+
+    App.scrollRanges = []
     setSizes = ->
-        headerTop = header.$el.offset().top
-        portfolioTop = portfolioSideBar.$el.offset().top-100
-        portfolioLeft = $portfolio.offset().left
-        resumeTop = portfolioTop + $portfolio.height() - $('.sidebar-list-wrapper').height()
+        App.scrollRanges = [
+            {
+                lo: App.Views.headerView.offsetTop()
+                handle: -> App.Views.headerView.positionFixed()
+                handleLo: -> App.Views.headerView.positionAbsolute()
+            },
+            {
+                lo: App.Views.portfolioView.offsetTop()
+                hi: App.Views.portfolioView.offsetBottom()
+                handle: -> App.Views.portfolioView.positionFixed()
+                handleLo: -> App.Views.portfolioView.positionAbsolute()
+                handleHi: -> App.Views.portfolioView.fadeOut()
+            }
+            {
+                lo: -100
+                hi: App.Views.portfolioView.offsetTop()
+                handle: (scroll) -> $calloutImage.css {'background-position': "50% #{scroll}px"}
+            }
+        ]
+
+        addLinkAnchorRanges = ($links, offset) ->
+            _.each $links, (link, i) ->
+                $link = $(link)
+                pageID = $(link).attr('href')
+                $page = $("#{pageID}")
+                lo = $page.offset().top
+                hi = lo + $page.outerHeight()
+                rangeData =
+                    lo: lo - offset
+                    hi: hi - offset
+                    handle: ->
+                        $links.removeClass('active')
+                        $link.addClass('active')
+                if i == 0
+                    rangeData.handleLo = -> $links.removeClass('active')
+                App.scrollRanges.push rangeData
+
+        addLinkAnchorRanges(App.Views.headerView.$links, App.Constants.HEADER_HEIGHT)
+        addLinkAnchorRanges(App.Views.portfolioView.$sidebarLinks, App.Constants.HEADER_HEIGHT)
+
+
+    setSizes()
     $window.resize ->
         setSizes()
-    setSizes()
+        App.Views.portfolioView.resize()
+
+
+
 
     $window.scroll (e)->
         scroll = $window.scrollTop()
 
-        if scroll < headerTop
-            header.positionAbsolute()
-        else
-            header.positionFixed()
+        _.each App.scrollRanges, (range) ->
 
-        if portfolioTop < scroll < resumeTop
-            portfolioSideBar.positionFixed()
-        else if scroll <= portfolioTop
-            portfolioSideBar.positionAbsolute()
+            if range.lo? && !range.hi?
+                if scroll >= range.lo
+                    range.handle(scroll) if range.handle?
+                else
+                    range.handleLo(scroll) if range.handleLo?
 
-        else
-            portfolioSideBar.fadeOut()
+            else if !range.lo? && range.hi?
+                if scroll < range.hi
+                    range.handle(scroll) if range.handle?
+                else
+                    range.handleHi(scroll) if range.handleHi?
 
-        $calloutImage.css
-            'background-position': "50% #{scroll}px"
+            else if range.lo? && range.hi?
+                if range.lo <= scroll < range.hi
+                    range.handle(scroll)
+                else if scroll < range.lo
+                    range.handleLo(scroll) if range.handleLo?
+                else
+                    range.handleHi(scroll) if range.handleHi?
+
