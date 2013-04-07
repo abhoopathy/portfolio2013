@@ -5,7 +5,7 @@ layout: default
 
 
 <div class='page-wrapper callout-image'>
-    <div class='page' id='about'>
+    <div class='page pg-static' >
         {% include about.html %}
     </div>
 </div>
@@ -15,19 +15,22 @@ layout: default
 </div>
 
 <div class='page-wrapper'>
-    <div class='page' id='portfolio'>
+    <div class='page border-bottom'>
+        <div class='page-anchor' id='portfolio'></div>
         {% include portfolio.html %}
     </div>
 </div>
 
 <div class='page-wrapper'>
-    <div class='page border-top' id='resume'>
+    <div class='page border-bottom' >
+        <div class='page-anchor' id='resume'></div>
         {% include resume.html %}
     </div>
 </div>
 
 <div class='page-wrapper'>
-    <div class='page border-top' id='contact'>
+    <div class='page'>
+        <div class='page-anchor' id='contact'></div>
         {% include contact.html %}
     </div>
 </div>

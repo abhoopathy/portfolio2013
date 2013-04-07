@@ -13,14 +13,21 @@ header
 .page-wrapper
     display block
 
+// modernizr fixed?
+.page-anchor
+    position absolute
+    top 0
 .page
+    position relative
     width 960px + 2 * $container-side-padding
-    padding 100px $container-side-padding 100px $container-side-padding
-    margin auto
+    padding 20px $container-side-padding 100px $container-side-padding
+    margin 80px auto 0 auto
     clearfix()
+.pg-static
+    position static
 
-.border-top
-    border-top 1px solid $line-color
+.border-bottom
+    border-bottom 1px solid $line-color
 .center-text
     text-align center
 .m-top-20
@@ -43,11 +50,9 @@ header
     margin-bottom 25px
 
 /* special styling portfolio, because of sidebar*/
-.page#portfolio
-    position relative
 .sidebar-list-wrapper
     position absolute
-    top 216px
+    top 120px
     left 30px
     &.fixed
         position fixed

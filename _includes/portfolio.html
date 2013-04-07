@@ -47,7 +47,8 @@
 
 
     {% for post in site.tags.academic %}
-        <div class='portfolio-piece' id="portfolio-piece-{{ post.uid }}">
+        <div class='portfolio-piece'>
+            <div class='page-anchor' id="portfolio-piece-{{ post.uid }}"></div>
             <h2>{{ post.title }}</h2>
             <p class='tagline'>{{ post.tagline }}</p>
             {{ post.content }}
@@ -55,7 +56,8 @@
     {% endfor %}
 
     {% for post in site.tags.industry %}
-        <div class='portfolio-piece' id="portfolio-piece-{{ post.uid }}">
+        <div class='portfolio-piece'>
+            <div class='page-anchor' id="portfolio-piece-{{ post.uid }}"></div>
             <h2>{{ post.title }}</h2>
             <p class='tagline'>{{ post.tagline }}</p>
             {{ post.content }}
