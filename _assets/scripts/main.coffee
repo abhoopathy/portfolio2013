@@ -15,7 +15,7 @@ $window.load ->
             'portfolio-piece-:pieceID' : 'portfolioPiece'
 
         portfolio: () ->
-            App.Views.portfolioView.showSidebar()
+            App.Views.portfolioView.positionAbsolute()
             App.Views.headerView.positionFixed()
 
         resume: () ->
@@ -27,7 +27,7 @@ $window.load ->
 
         portfolioPiece: () ->
             App.Views.headerView.positionFixed()
-            App.Views.portfolioView.showSidebar()
+            App.Views.portfolioView.positionFixed()
 
     class CarouselView extends Backbone.View
 
@@ -77,80 +77,71 @@ $window.load ->
         offsetTop: -> @$el.offset().top
 
         positionFixed: ->
-            if !@fixed
-                @fixed=true
-                @$el.addClass('fixed')
+            @$el.addClass('fixed')
 
         positionAbsolute: ->
-            if @fixed
-                @fixed=false
-                @$el.removeClass('fixed')
+            @$el.removeClass('fixed')
 
 
     class PortfolioView extends Backbone.View
 
         el: $('#portfolio').closest('.page')
-        visible: true
-        fadedIn: true
         sidebarMarginTop: 152
         sidebarMarginLeft: 30
+        sidebarVisible: true
 
         initialize: ->
+            _.bindAll(this)
             @$sidebar = @$('.sidebar-list-wrapper')
             @$sidebarLinks = @$sidebar.find('.sidebar-sub-list-item a')
-            @$('.img-carousel').each (i,el) -> new CarouselView {el: el}
             @sidebarAbsoluteMarginTop = @$sidebar.position().top
+            @$('.img-carousel').each (i,el) -> new CarouselView {el: el}
+
+            App.Events.on "windowSizeChange:mobile", @resizeMobile
+            App.Events.on "windowSizeChange:desktop", @resizeDesktop
+            App.Events.on "windowSizeChange", @windowResized
+
+        windowResized: ->
+            @$sidebar.css
+                    left: @$el.offset().left + @sidebarMarginLeft
+
+        resizeMobile: ->
+            @sidebarVisible = false
+            @$sidebar.hide()
+
+        resizeDesktop: ->
+            @sidebarVisible = true
+            @$sidebar.show()
 
         offsetTop: -> @$sidebar.offset().top - @sidebarMarginTop
         offsetBottom: -> @$el.offset().top + @$el.height() - @$sidebar.height()
 
         positionFixed: ->
-            if !@fixed
-                @fixed=true
-                @$sidebar
-                    .addClass('fixed')
-                    .css
-                        left: @$el.offset().left + @sidebarMarginLeft
-                        top: @sidebarMarginTop
-            else if !@fadedIn
-                @fadedIn=true
-                @$sidebar.fadeIn(100)
-
-        positionAbsolute: ->
-            if @fixed
-                @fixed=false
-                @$sidebar.fadeIn(100)
-                @$sidebar.removeClass('fixed')
-                    .css
-                        left: @sidebarMarginLeft
-                        top: @sidebarAbsoluteMarginTop
-
-        showSidebar: ->
-            @$sidebar
-                .addClass('fixed')
+            @$sidebar.addClass('fixed')
                 .css
                     left: @$el.offset().left + @sidebarMarginLeft
                     top: @sidebarMarginTop
-            @$sidebar.fadeIn(100)
-            @fixed=true
-            @fadedIn=true
+            @$sidebar.fadeIn(100) if @sidebarVisible
 
-        resize: ->
-            if @fixed
-                @$sidebar.css
-                        left: @$el.offset().left + @sidebarMarginLeft
-                        top: @sidebarMarginTop
+        positionAbsolute: ->
+            @$sidebar.removeClass('fixed')
+                .css
+                    left: @sidebarMarginLeft
+                    top: @sidebarAbsoluteMarginTop
+            @$sidebar.fadeIn(100) if @sidebarVisible
 
         fadeOut: ->
-            if @fadedIn
-                @fadedIn=false
-                @$sidebar.fadeOut(100)
+            @$sidebar.fadeOut(100)
+
 
 
     class AppView extends Backbone.View
 
         el: ('body')
         scrollRanges: []
+        mobile: false
+        windowWidth: document.documentElement.clientWidth
+        resizeTimeout: null
 
         initialize: ->
             _.bindAll(this)
@@ -171,38 +162,79 @@ $window.load ->
 
             @scrolled = false
             window.setInterval @checkScroll, 30
-
             $window.scroll @handleWindowScroll
+
             $window.resize @handleWindowResize
 
         handleWindowResize: ->
-                @setSizes()
-                App.Views.portfolioView.resize()
+            clearTimeout @resizeTimeout
+            @resizeTimeout = setTimeout @resizeDone, 80
+
+        resizeDone: ->
+            @windowWidth = document.documentElement.clientWidth
+
+            App.Events.trigger "windowSizeChange", @windowWidth
+
+            if @windowWidth > 960 && @mobile
+                @mobile = false
+                App.Events.trigger "windowSizeChange:desktop", @windowWidth
+            if @windowWidth <= 960 && !@mobile
+                @mobile = true
+                App.Events.trigger "windowSizeChange:mobile", @windowWidth
+
+            @setSizes()
 
         checkScroll: ->
             scroll = $window.scrollTop()
             if @scrolled
                 _.each @scrollRanges, (range) ->
 
+                    # if only lower bound is defined
                     if range.lo? && !range.hi?
+
+                        # if newly in range, trigger in range handler
                         if scroll >= range.lo
-                            range.handle(scroll) if range.handle?
-                        else
-                            range.handleLo(scroll) if range.handleLo?
+                            if range.current != 'inRange'
+                                range.handle?(scroll)
+                            range.current = 'inRange'
 
+                        # if newly too low, trigger low handler
+                        else
+                            if range.current != 'low'
+                                range.handleLo?(scroll)
+                            range.current = 'low'
+
+                    # if only higher bound is defined
                     else if !range.lo? && range.hi?
-                        if scroll < range.hi
-                            range.handle(scroll) if range.handle?
-                        else
-                            range.handleHi(scroll) if range.handleHi?
 
-                    else if range.lo? && range.hi?
-                        if range.lo <= scroll < range.hi
-                            range.handle(scroll)
-                        else if scroll < range.lo
-                            range.handleLo(scroll) if range.handleLo?
+                        if scroll < range.hi
+                            if range.current != 'inRange'
+                                range.handle?(scroll)
+                            range.current = 'inRange'
+
                         else
-                            range.handleHi(scroll) if range.handleHi?
+                            if range.current != 'hi'
+                                range.handleHi?(scroll)
+                            range.current = 'hi'
+
+                    # if both bounds are defined
+                    else if range.lo? && range.hi?
+
+                        if range.lo <= scroll < range.hi
+                            if range.current != 'inRange'
+                                range.handle?(scroll)
+                            range.current = 'inRange'
+
+                        else if scroll < range.lo
+                            if range.current != 'low'
+                                range.handleLo?(scroll)
+                            range.current = 'low'
+
+                        else
+                            if range.current != 'hi'
+                                range.handleHi?(scroll)
+                            range.current = 'hi'
+
             @scrolled = false
 
 
@@ -233,6 +265,8 @@ $window.load ->
 
             @addLinkAnchorRanges(App.Views.portfolioView.$sidebarLinks,
                 App.Views.headerView.headerHeight, 'portfolio-piece')
+
+            setSizes: -> $window.trigger('scroll')
 
         addLinkAnchorRanges: ($links, offset, parentClass, navigate) ->
             _.each $links, ((link, i) ->

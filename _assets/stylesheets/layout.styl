@@ -60,34 +60,26 @@ header
     push(3)
 
 
-@media only screen and (max-width: 960px)
+@media (max-width: 960px)
 
     header
         width 100%
         margin-left 0
         left 0
+    .callout-image
+        display none
 
-    .container
+    .page
         width 100%
-
-    .page-column2.page-column4, .page-column8, .page-column12, .page-column10
+        position static
+    .page-column2, .page-column4, .page-column8, .page-column12, .page-column10
         width 100%
         margin-left 0
         margin-right 0
-
-    .page#portfolio
-        position static
-
-        .sidebar-list-wrapper
-            display none
-            visibility hidden
-
-            &.fixed
-                display none
-                visibility hidden
-
-        .portfolio-pieces
-            width 100%
-            margin-left 0
-            margin-right 0
+    .sidebar-list-wrapper
+        display none
+    .portfolio-pieces
+        width 100%
+        margin-left 0
+        margin-right 0
 
