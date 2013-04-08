@@ -9,14 +9,25 @@ $window.load ->
 
     class Router extends Backbone.Router
         routes:
-            "portfolio": "portfolio"
-            "resume": "fixHeader"
-            "contact": "fixHeader"
+            'portfolio'                : 'portfolio'
+            'resume'                   : 'resume'
+            'contact'                  : 'contact'
+            'portfolio-piece-:pieceID' : 'portfolioPiece'
+
         portfolio: () ->
             App.Views.portfolioView.showSidebar()
-            @fixHeader()
-        fixHeader: () ->
             App.Views.headerView.positionFixed()
+
+        resume: () ->
+            App.Views.headerView.positionFixed()
+
+        contact: () ->
+            App.Views.headerView.positionFixed()
+
+
+        portfolioPiece: () ->
+            App.Views.headerView.positionFixed()
+            App.Views.portfolioView.showSidebar()
 
     class CarouselView extends Backbone.View
 
@@ -107,15 +118,23 @@ $window.load ->
 
         positionAbsolute: ->
             if @fixed
-                @showSidebar()
+                @fixed=false
+                @$sidebar.fadeIn(100)
+                @$sidebar.removeClass('fixed')
+                    .css
+                        left: @sidebarMarginLeft
+                        top: @sidebarAbsoluteMarginTop
 
         showSidebar: ->
-            @fixed=false
-            @$sidebar.fadeIn(100)
-            @$sidebar.removeClass('fixed')
+            @$sidebar
+                .addClass('fixed')
                 .css
-                    left: @sidebarMarginLeft
-                    top: @sidebarAbsoluteMarginTop
+                    left: @$el.offset().left + @sidebarMarginLeft
+                    top: @sidebarMarginTop
+            @$sidebar.fadeIn(100)
+            @fixed=true
+            @fadedIn=true
+
         resize: ->
             if @fixed
                 @$sidebar.css
@@ -210,12 +229,12 @@ $window.load ->
             ]
 
             @addLinkAnchorRanges(App.Views.headerView.$links,
-                App.Views.headerView.headerHeight, 'page')
+                App.Views.headerView.headerHeight, 'page', true)
 
             @addLinkAnchorRanges(App.Views.portfolioView.$sidebarLinks,
                 App.Views.headerView.headerHeight, 'portfolio-piece')
 
-        addLinkAnchorRanges: ($links, offset, parentClass) ->
+        addLinkAnchorRanges: ($links, offset, parentClass, navigate) ->
             _.each $links, ((link, i) ->
                 $link = $(link)
                 pageID = $(link).attr('href')
@@ -225,11 +244,17 @@ $window.load ->
                 rangeData =
                     lo: lo - offset
                     hi: hi - offset
-                    handle: ->
-                        $links.removeClass('active')
-                        $link.addClass('active')
                 if i == 0
                     rangeData.handleLo = -> $links.removeClass('active')
+                if navigate
+                    rangeData.handle = ->
+                        $links.removeClass('active')
+                        $link.addClass('active')
+                else
+                    rangeData.handle = ->
+                        $links.removeClass('active')
+                        $link.addClass('active')
+
                 @scrollRanges.push rangeData
             ), this
 
@@ -241,4 +266,3 @@ $window.load ->
         Backbone.history.start()
 
     App.initialize()
-

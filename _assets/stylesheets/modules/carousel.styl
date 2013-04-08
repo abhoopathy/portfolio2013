@@ -1,0 +1,46 @@
+.img-carousel
+    clearfix()
+    width 90%
+    margin 1.6em auto 0.2em auto
+    position relative
+    text-align center
+
+    .portfolio-img
+        border none
+        display none
+
+        &:first-child
+            display block
+
+    &:hover
+        .img-carousel-button
+            display block
+
+.img-carousel-button
+        display none
+        $carousel-button-size=1.5em
+        z-index 900
+        position absolute
+        width $carousel-button-size
+        height $carousel-button-size
+        margin-top -1.5em
+        top 50%
+        border-radius $carousel-button-size
+
+        text-align center
+        font-size 2em
+        line-height $carousel-button-size
+        background-color $line-color
+        cursor pointer
+        opacity .5
+
+        &:hover
+            opacity .9
+
+.img-carousel-button-prev
+    left 0px
+    content '>'
+
+.img-carousel-button-next
+    right 0px
+    content '<'

@@ -46,3 +46,15 @@ $nav-indicator-size= 3px
     line-height $top-bar-size
     position relative
     h-spacing(20px)
+
+    a
+        text-decoration none
+        color white
+        border-bottom $nav-indicator-size solid transparent
+        &:hover
+            color $secondary-text-color
+        &.active
+            border-bottom $nav-indicator-size solid $nav-indicator-color
+            color $nav-indicator-color
+            &:hover
+                color $nav-indicator-color
