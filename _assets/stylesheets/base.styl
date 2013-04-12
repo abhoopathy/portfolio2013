@@ -4,17 +4,22 @@
 body
     background-color $background-color
 
-button
+button, a.btn, a.btn:link, a.btn:visited, a.btn:active
+    display inline-block
+    clear both
     background-color $button-color
     border none
     padding 1em 1.5em
+    margin 1.5em 0 0 0
     color $button-text-color
     text-transform uppercase
+    text-decoration none
     border-radius 5px
     text-shadow 0px 1px darken($button-color,20%)
     font-family: 'deliciousbold'
     &:hover
         background-color lighten($button-color,10%)
+        color $button-text-color
 
 a, a:link, a:visited, a:active
     color $secondary-text-color
