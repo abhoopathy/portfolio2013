@@ -6,10 +6,10 @@ tagline: How can students and teachers work more efficiently?
 uid: blackboard
 ---
 
-For a class, I worked and four other students researched the workflow of
-college students via a contextual inquiry. I took this data forward into
-redesigning one of the most disliked pieces of software on the planet,
-Blackboard.
+For a class, I worked with four other students, researching the workflow
+of college students via a contextual inquiry. I took this data forward
+into redesigning one of the most disliked pieces of software on the
+planet, Blackboard.
 
 ### User Research
 

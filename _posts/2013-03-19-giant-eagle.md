@@ -17,8 +17,10 @@ employee training manual with a more quickly updatable solution.
     The app operated in both landscape and portrait orientations.
 </p>
 
+<div class="img-carousel">
 {% portfolio_image 03_all_steps.jpg %}
 {% portfolio_image 01_organization.jpg %}
+</div>
 
 {% portfolio_image_nostretch 06_icons.jpg %}
 <p class='img-caption'>
@@ -28,7 +30,9 @@ employee training manual with a more quickly updatable solution.
 The project also involved the possibility of a web dashboard for creating and
 managing training modules. These wireframes explore that idea.
 
-{% portfolio_image 04_browser_manage.jpg %}
+
+
+<div class="img-carousel">
 {% portfolio_image 05_browser_edit.jpg %}
-
-
+{% portfolio_image 04_browser_manage.jpg %}
+</div>

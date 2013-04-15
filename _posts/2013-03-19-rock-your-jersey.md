@@ -15,10 +15,14 @@ This was one of the my first experiences both designing and developing
 an application.
 
 
-{% portfolio_image ryjnfl02.jpg %}
+<div class="img-carousel">
 {% portfolio_image ryjnfl01.jpg %}
-{% portfolio_image ryjwc02.jpg %}
+{% portfolio_image ryjnfl02.jpg %}
+</div>
+<div class="img-carousel">
 {% portfolio_image ryjwc.jpg %}
+{% portfolio_image ryjwc02.jpg %}
+</div>
 {% portfolio_image ryj_psu_02.jpg %}
 <div class='img-box-5'>
     {% portfolio_image_nostretch atl_alt_2_ryan.png %}
