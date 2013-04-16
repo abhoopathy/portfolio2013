@@ -1,5 +1,14 @@
 $window = $(window)
 
+$ ->
+    $('.img-carousel').each (i,el) ->
+        $(el).children('.portfolio-img').each (i,img) ->
+            if i > 0
+                $img = $(img)
+                source = $img.attr('src')
+                source = $img.attr('data-src',source)
+                $img.removeAttr('src')
+
 $window.load ->
 
     window.App =
@@ -39,10 +48,24 @@ $window.load ->
             @$buttonNext = $("<div class='img-carousel-button img-carousel-button-next'>></div>")
             @$el.append @$buttonPrev
             @$el.append @$buttonNext
-            @$buttonPrev.click @prevImage
-            @$buttonNext.click @nextImage
             @images = @$el.find('.portfolio-img')
             @$el.height(@images.first().height())
+            @delegateEvents()
+
+        events:
+            'mouseover'                        : 'getImages'
+            'click .img-carousel-button-next' : 'nextImage'
+            'click .img-carousel-button-prev' : 'prevImage'
+
+        getImages: () ->
+            if !@imagesFetched
+                @$('.portfolio-img').each (i,img) ->
+                    if i > 0
+                        $img = $(img)
+                        source = $img.attr('data-src')
+                        source = $img.attr('src',source)
+                        $img.removeAttr('data-src')
+            @imagesFetched=true
 
         step: (i1,i2)->
             $(@images[i1]).hide()
