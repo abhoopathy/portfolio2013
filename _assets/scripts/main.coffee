@@ -11,7 +11,6 @@ $ ->
 
 ## after image carousel plugin does its thing,
 ## so that page section sizes are correct
-#
 $window.load ->
 
     window.App =
