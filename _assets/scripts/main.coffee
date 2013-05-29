@@ -9,6 +9,9 @@ $ ->
                 source = $img.attr('data-src',source)
                 $img.removeAttr('src')
 
+## after image carousel plugin does its thing,
+## so that page section sizes are correct
+#
 $window.load ->
 
     window.App =
@@ -16,12 +19,13 @@ $window.load ->
         Constants: {}
         Events: _.extend({},Backbone.Events)
 
+
     class Router extends Backbone.Router
         routes:
             'portfolio'                : 'portfolio'
             'resume'                   : 'resume'
             'contact'                  : 'contact'
-            'portfolio-piece-:pieceID' : 'portfolioPiece'
+            #'portfolio-piece-:pieceID' : 'portfolioPiece'
 
         portfolio: () ->
             App.Views.portfolioView.positionAbsolute()
@@ -33,10 +37,10 @@ $window.load ->
         contact: () ->
             App.Views.headerView.positionFixed()
 
+        #portfolioPiece: () ->
+            #App.Views.headerView.positionFixed()
+            #App.Views.portfolioView.positionFixed()
 
-        portfolioPiece: () ->
-            App.Views.headerView.positionFixed()
-            App.Views.portfolioView.positionFixed()
 
     class CarouselView extends Backbone.View
 
@@ -177,7 +181,7 @@ $window.load ->
             @$('#contact').closest('.page').css
                 'min-height': $window.height()
 
-            #TODO modernizr logic to this?
+            #TODO add modernizr logic to this?
             @$('.page-anchor').css
                 top: -1 * App.Views.headerView.headerHeight
 
